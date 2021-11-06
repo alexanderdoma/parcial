@@ -17,4 +17,5 @@ public interface GenericDAO<T, K> {
     void modificar(T o)throws DAOException;
     T obtenerxId(K id)throws DAOException;
     List<T> obtenerTodos()throws DAOException;
+    List<T> buscar(String busqueda) throws DAOException;
 }

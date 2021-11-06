@@ -15,12 +15,12 @@ public class Producto {
     private String modelo;
     private int stock;
     private double precio;
-    private boolean estado;
+    private int estado;
 
     public Producto() {
     }
 
-    public Producto(Integer id_producto, String nombre, String descripcion, String modelo, int stock, double precio, boolean estado) {
+    public Producto(Integer id_producto, String nombre, String descripcion, String modelo, int stock, double precio, int estado) {
         this.id_producto = id_producto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -78,11 +78,11 @@ public class Producto {
         this.precio = precio;
     }
 
-    public boolean isEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
-    }    
+    }
 }

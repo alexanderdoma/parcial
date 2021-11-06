@@ -21,9 +21,10 @@ import java.util.List;
 public class MysqlProductoDAO implements IProductoDAO{
     
     final String GETALL = "SELECT * FROM productos";
-    final String INSERT = "INSERT INTO productos VALUES(nombre, descripcion, modelo, stock, precio, estado,) VALUES(?,?,?,?,?,?)";
-    final String UPDATE = "UPDATE productos" + "SET nombre=?, descripcion=?, modelo=?, stock=?, precio=?, estado=?" + "WHERE id_producto=?";
+    final String INSERT = "INSERT INTO productos(nombre, descripcion, modelo, stock, precio, estado) VALUES(?,?,?,?,?,?)";
+    final String UPDATE = "UPDATE productos SET nombre=?, descripcion=?, modelo=?, stock=?, precio=?, estado=? WHERE id_producto=?";
     final String DELETE = "DELETE FROM productos WHERE id_producto = ?";
+    final String QUERY = "SELECT * FROM productos WHERE nombre LIKE ? || descripcion LIKE ?";
     
     private Connection cn;
 
@@ -33,17 +34,74 @@ public class MysqlProductoDAO implements IProductoDAO{
     
     @Override
     public void insertar(Producto o) throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
+        try {
+            ps = cn.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+            int i = 1;
+            ps.setString(i++, o.getNombre());
+            ps.setString(i++, o.getDescripcion());
+            ps.setString(i++, o.getModelo());
+            ps.setInt(i++, o.getStock());
+            ps.setDouble(i++, o.getPrecio());
+            ps.setInt(i++, o.getEstado());
+            
+            if(ps.executeUpdate()==0)
+                throw new DAOException("¡No se pudo registrar el registro!");
+            rs = ps.getGeneratedKeys();
+            if(rs.next()){
+                o.setId_producto(rs.getInt(1));
+                
+            }else{
+                throw new DAOException("No se puede generar el id del producto");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException(ex);
+            
+        }finally{
+            
+            try {
+                if(ps!=null)ps.close();
+                if(rs!=null) rs.close();
+            } catch (SQLException ex) {
+                throw new DAOException("Error al finalizar",ex);
+            }
+        }
     }
 
     @Override
     public void eliminar(Producto o) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement ps = null;
+        
+        try {
+            ps = cn.prepareStatement(DELETE);
+            ps.setInt(1, o.getId_producto());
+            ps.execute();
+        } catch (SQLException ex) {
+            throw new DAOException("Error al eliminar: ", ex);
+        }
     }
 
     @Override
     public void modificar(Producto o) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement ps = null;
+        try {
+            ps = cn.prepareStatement(UPDATE);
+            int i = 1;
+            ps.setString(i++, o.getNombre());
+            ps.setString(i++, o.getDescripcion());
+            ps.setString(i++, o.getModelo());
+            ps.setInt(i++, o.getStock());
+            ps.setDouble(i++, o.getPrecio());
+            ps.setInt(i++, o.getEstado());
+            ps.setInt(i++, o.getId_producto());
+                    
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DAOException(ex);
+        }
+        
     }
 
     @Override
@@ -51,6 +109,7 @@ public class MysqlProductoDAO implements IProductoDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    //Metodo para obtener un lista
     @Override
     public List<Producto> obtenerTodos() throws DAOException {
         PreparedStatement ps = null;
@@ -65,15 +124,16 @@ public class MysqlProductoDAO implements IProductoDAO{
         } catch (SQLException ex) {
             throw new DAOException("Error en sql",ex);
         }finally{
-            if(rs!=null) try {
-                rs.close();
-                ps.close();
+             try {
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
             } catch (SQLException ex) {
                 throw new DAOException("Error en sql",ex);
             }
         }
         return lista;
     }
+    
     //Este metodo devuelve un objeto producto, le asignamos un objeto resulset y le asignamos los datos a los parametros de nuestro constructor Producto()
     private Producto getRs(ResultSet rs) throws SQLException{
         return new Producto(
@@ -83,7 +143,34 @@ public class MysqlProductoDAO implements IProductoDAO{
             rs.getString("modelo"),
             rs.getInt("stock"),
             rs.getDouble("precio"),
-            rs.getBoolean("estado")
+            rs.getInt("estado")
         );
+    }
+
+    @Override
+    public List<Producto> buscar(String busqueda) throws DAOException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> lista = new ArrayList<>();
+        try {
+            ps = cn.prepareStatement(QUERY);
+            String consulta = "%" + busqueda + "%";
+            ps.setString(1, consulta);
+            ps.setString(2, consulta);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                lista.add(getRs(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en sql qui"+ex);
+        }finally{
+             try {
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+            } catch (SQLException ex) {
+                throw new DAOException("Error en sql",ex);
+            }
+        }
+        return lista;
     }
 }

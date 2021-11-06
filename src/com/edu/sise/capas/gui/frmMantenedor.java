@@ -4,7 +4,10 @@
  */
 package com.edu.sise.capas.gui;
 
+import com.edu.sise.capas.entity.Producto;
 import com.edu.sise.capas.logic.ProductoLogic;  
+
+
 import javax.swing.JOptionPane;
 
 /**
@@ -21,15 +24,15 @@ public class frmMantenedor extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(this);
         txtCodigo.setEnabled(false);
+        txtCodigo.setText("0");
     }
     private void Limpiar(){
-        txtCodigo.setText("");
+        txtCodigo.setText("0");
         txtNombre.setText("");
         txtDescripcion.setText("");
         txtModelo.setText("");
         txtStock.setText("");
         txtPrecio.setText("");
-        txtEstado.setText("");
         btnLimpiar.setEnabled(false);
     }
     /**
@@ -59,16 +62,17 @@ public class frmMantenedor extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         txtModelo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtEstado = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtStock = new javax.swing.JTextField();
+        cboEstado = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jTextField8 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
+        txtBusqueda = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbLista = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +94,7 @@ public class frmMantenedor extends javax.swing.JFrame {
         jLabel4.setText("DESCRIPCIÓN:");
 
         txtCodigo.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        txtCodigo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCodigo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         txtNombre.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -100,12 +105,27 @@ public class frmMantenedor extends javax.swing.JFrame {
 
         btnAgregar.setBackground(new java.awt.Color(255, 255, 255));
         btnAgregar.setText("AGREGAR");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnModificar.setBackground(new java.awt.Color(255, 255, 255));
         btnModificar.setText("MODIFICAR");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("ELIMINAR");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnListar.setBackground(new java.awt.Color(255, 255, 255));
         btnListar.setText("LISTAR");
@@ -124,6 +144,7 @@ public class frmMantenedor extends javax.swing.JFrame {
         });
 
         txtPrecio.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        txtPrecio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPrecio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         jLabel5.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
@@ -141,15 +162,16 @@ public class frmMantenedor extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(0, 181, 140));
         jLabel7.setText("ESTADO:");
 
-        txtEstado.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        txtEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 181, 140));
         jLabel6.setText("STOCK:");
 
         txtStock.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        txtStock.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtStock.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+
+        cboEstado.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "No activo" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -194,7 +216,7 @@ public class frmMantenedor extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -206,8 +228,7 @@ public class frmMantenedor extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
@@ -215,17 +236,18 @@ public class frmMantenedor extends javax.swing.JFrame {
                             .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                        .addGap(1, 1, 1)))
+                        .addGap(10, 10, 10))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtModelo, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEstado, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStock, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                    .addComponent(txtStock, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                    .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,15 +281,20 @@ public class frmMantenedor extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 181, 140)));
 
-        jTextField8.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jTextField8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        txtBusqueda.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        txtBusqueda.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/edu/sise/capas/gui/resource/2561381_search_icon.png"))); // NOI18N
-        jButton6.setBorder(null);
-        jButton6.setBorderPainted(false);
-        jButton6.setContentAreaFilled(false);
-        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/edu/sise/capas/gui/resource/2561381_search_icon.png"))); // NOI18N
+        txtBuscar.setBorder(null);
+        txtBuscar.setBorderPainted(false);
+        txtBuscar.setContentAreaFilled(false);
+        txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
 
         tbLista.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         tbLista.setModel(new javax.swing.table.DefaultTableModel(
@@ -281,6 +308,11 @@ public class frmMantenedor extends javax.swing.JFrame {
 
             }
         ));
+        tbLista.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbListaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbLista);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -289,9 +321,9 @@ public class frmMantenedor extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -303,12 +335,16 @@ public class frmMantenedor extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jLabel1.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setText("Filtro solo valido para nombre y descripcion");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -319,7 +355,10 @@ public class frmMantenedor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -328,9 +367,11 @@ public class frmMantenedor extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(8, 8, 8)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -362,6 +403,99 @@ public class frmMantenedor extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_btnListarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+        logic = new ProductoLogic();
+        Producto objProducto = null;
+        try {
+            objProducto = getProducto();
+            objProducto.setId_producto(0);
+            logic.insertar(objProducto);
+            
+            if(objProducto.getId_producto()>0){
+                JOptionPane.showMessageDialog(null, "Se registro correctamente el producto con Código: " + objProducto.getId_producto());
+            }
+            logic.imprimirTB(tbLista);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+        
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        logic = new ProductoLogic();
+        Producto objProducto = null;
+        objProducto = getProducto();
+        try {
+            logic.eliminar(objProducto);
+            logic.imprimirTB(tbLista);
+            JOptionPane.showMessageDialog(null,"Registro eliminado corrextamente");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tbListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbListaMouseClicked
+        // TODO add your handling code here:
+        int fila;
+        fila = tbLista.getSelectedRow();
+        int id, stock, estado;
+        String nombre, descripcion, modelo;
+        double precio;
+        
+        if(fila>=0){
+            //Columnas: ID - NOMBRE - CLAVE
+            //Posiciones: 0 - 1 - 2
+            id = Integer.parseInt(tbLista.getValueAt(fila, 0)+"");
+            nombre = tbLista.getValueAt(fila, 1)+"";
+            descripcion = tbLista.getValueAt(fila, 2)+"";
+            modelo = tbLista.getValueAt(fila, 3)+"";
+            stock  = Integer.parseInt(tbLista.getValueAt(fila, 4)+"");
+            precio = Double.parseDouble(tbLista.getValueAt(fila,5)+"");
+            estado = Integer.parseInt(tbLista.getValueAt(fila,6)+"");
+            //Asignaciones
+            txtCodigo.setText(id+"");
+            txtNombre.setText(nombre);
+            txtDescripcion.setText(descripcion);
+            txtModelo.setText(modelo);
+            txtStock.setText(stock+"");
+            txtPrecio.setText(precio+"");
+            if(estado == 0){
+                cboEstado.setSelectedIndex(1);
+            }
+            else{
+                cboEstado.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_tbListaMouseClicked
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        logic = new ProductoLogic();
+        Producto objProducto = null;
+        objProducto = getProducto();
+        
+        try {
+            logic.actualizar(objProducto);
+            logic.imprimirTB(tbLista);
+            JOptionPane.showMessageDialog(null,"Registro actualizado corrextamente");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+                
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+        logic = new ProductoLogic();
+        try {
+            logic.imprimirTBbusqueda(tbLista, txtBusqueda.getText());
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        }
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,6 +531,7 @@ public class frmMantenedor extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -404,7 +539,8 @@ public class frmMantenedor extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JComboBox<String> cboEstado;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -418,14 +554,30 @@ public class frmMantenedor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTable tbLista;
+    private javax.swing.JButton txtBuscar;
+    private javax.swing.JTextField txtBusqueda;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDescripcion;
-    private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
+    
+    Producto getProducto(){
+        int estado = 0;
+       if (cboEstado.getName() == "Activo"){
+           estado = 1;
+       }
+        return new Producto(
+            Integer.parseInt(txtCodigo.getText()),
+            txtNombre.getText(),
+            txtDescripcion.getText(),
+            txtModelo.getText(),
+            Integer.parseInt(txtStock.getText()),
+            Double.parseDouble(txtPrecio.getText()),
+            estado
+        );
+    }
 }
