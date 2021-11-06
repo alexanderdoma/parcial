@@ -13,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,18 +33,7 @@ public class MysqlProductoDAO implements IProductoDAO{
     
     @Override
     public void insertar(Producto o) throws DAOException {
-        PreparedStatement ps = null;
-        try {
-            ps.setString(0, o.getNombre());
-            ps.setString(1, o.getDescripcion());
-            ps.setString(2, o.getModelo());
-            ps.setInt(3, o.getStock());
-            ps.setDouble(4, o.getPrecio());
-            ps.setBoolean(5, o.isEstado());
-            ps.execute(INSERT);
-        } catch (SQLException ex) {
-            Logger.getLogger(MysqlProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     @Override
@@ -87,6 +74,7 @@ public class MysqlProductoDAO implements IProductoDAO{
         }
         return lista;
     }
+    //Este metodo devuelve un objeto producto, le asignamos un objeto resulset y le asignamos los datos a los parametros de nuestro constructor Producto()
     private Producto getRs(ResultSet rs) throws SQLException{
         return new Producto(
             rs.getInt("id_producto"),

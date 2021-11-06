@@ -4,12 +4,16 @@
  */
 package com.edu.sise.capas.gui;
 
+import com.edu.sise.capas.logic.ProductoLogic;  
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alexander
  */
 public class frmMantenedor extends javax.swing.JFrame {
 
+    ProductoLogic logic;
     /**
      * Creates new form frmMantenedor
      */
@@ -64,7 +68,7 @@ public class frmMantenedor extends javax.swing.JFrame {
         jTextField8 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbResultados = new javax.swing.JTable();
+        tbLista = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,6 +109,11 @@ public class frmMantenedor extends javax.swing.JFrame {
 
         btnListar.setBackground(new java.awt.Color(255, 255, 255));
         btnListar.setText("LISTAR");
+        btnListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setBackground(new java.awt.Color(255, 255, 255));
         btnLimpiar.setText("LIMPIAR");
@@ -207,7 +216,6 @@ public class frmMantenedor extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
                         .addGap(1, 1, 1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
@@ -261,8 +269,8 @@ public class frmMantenedor extends javax.swing.JFrame {
         jButton6.setContentAreaFilled(false);
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        tbResultados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        tbResultados.setModel(new javax.swing.table.DefaultTableModel(
+        tbLista.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        tbLista.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -273,7 +281,7 @@ public class frmMantenedor extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(tbResultados);
+        jScrollPane1.setViewportView(tbLista);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -345,6 +353,16 @@ public class frmMantenedor extends javax.swing.JFrame {
         btnLimpiar.setEnabled(true);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        // TODO add your handling code here:
+        logic = new ProductoLogic();
+        try {
+            logic.imprimirTB(tbLista);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnListarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -401,7 +419,7 @@ public class frmMantenedor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTable tbResultados;
+    private javax.swing.JTable tbLista;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtEstado;
