@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Alexander
  */
-public interface GenericDAO<T, K> {
+public interface GenericDAO<T, K>{
 
     void insertar(T o) throws DAOException;
     void eliminar(T o)throws DAOException;
