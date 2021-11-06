@@ -37,6 +37,7 @@ public class MysqlProductoDAO implements IProductoDAO{
     public void insertar(Producto o) throws DAOException {
         PreparedStatement ps = null;
         try {
+            //Agregamos parametros al prepared statement
             ps.setString(0, o.getNombre());
             ps.setString(1, o.getDescripcion());
             ps.setString(2, o.getModelo());
